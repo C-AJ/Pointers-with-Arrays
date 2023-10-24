@@ -67,7 +67,7 @@ void matrixMultiplication(int m, int n, int b, float arr1[MAX][MAX], float arr2[
         }
     }
     end = clock();
-    time_elasped = ((double) (end - start)) / (CLOCKS_PER_SEC);
+    time_elasped = (((double) (end - start)) / (CLOCKS_PER_SEC)) * 1000000;
 
     for(int i = 0; i < m; i++)
     {
@@ -78,9 +78,9 @@ void matrixMultiplication(int m, int n, int b, float arr1[MAX][MAX], float arr2[
         }
         printf("\r\n");
     }
-    printf("Amount of time elasped: ");
+    printf("Amount of time taken: ");
     printf("%lf", time_elasped);
-    printf("\r\n");
+    printf(" microseconds \r\n");
 }
 
 int main(void) {
@@ -89,6 +89,7 @@ int main(void) {
     int userInput = 1;
     float arr1[MAX][MAX];
     float arr2[MAX][MAX];
+    float userNumber;
 
     //Get user input for dimensions
     printf("Type dimensions for first 2-D array, max 100: ");
@@ -102,21 +103,51 @@ int main(void) {
     scanf("%d", &b);
     printf("\r\n");
 
+    printf("Would you like to: \r\n");
+    printf("1. Manually input floats \r\n");
+    printf("2. Automatically generate floats \r\n");
+    scanf("%d", &userInput);
 
-    //Randomize numbers in arrays
-    for (int i = 0; i < m; i++)
+    if (userInput == 1)
     {
-        for (int j = 0; j < n; j++)
+        printf("Enter floats for first matrix: \r\n");
+        for (int i = 0; i < m; i++)
         {
-            arr1[i][j] = ((float)rand()/(float)(RAND_MAX)) * 100;
+            printf("Enter row: ");
+            for (int j = 0; j < n; j++)
+            {
+                scanf("%f", &userNumber);
+                arr1[i][j] = userNumber;
+            }
+        }
+        printf("Enter floats for second matrix: \r\n");
+        for (int i = 0; i < a; i++)
+        {
+            printf("Enter row: ");
+            for (int j = 0; j < b; j++)
+            {
+                scanf("%f", &userNumber);
+                arr2[i][j] = userNumber;
+            }
         }
     }
-
-    for (int i = 0; i < a; i++)
+    else
     {
-        for (int j = 0; j < b; j++)
+        //Randomize numbers in arrays
+        for (int i = 0; i < m; i++)
         {
-            arr2[i][j] = ((float)rand()/(float)(RAND_MAX)) * 100;
+            for (int j = 0; j < n; j++)
+            {
+                arr1[i][j] = ((float)rand()/(float)(RAND_MAX)) * 1000.0;
+            }
+        }
+
+        for (int i = 0; i < a; i++)
+        {
+            for (int j = 0; j < b; j++)
+            {
+                arr2[i][j] = ((float)rand()/(float)(RAND_MAX)) * 1000.0;
+            }
         }
     }
 
@@ -176,21 +207,51 @@ int main(void) {
                 scanf("%d", &b);
                 printf("\r\n");
 
+                printf("Would you like to: \r\n");
+                printf("1. Manually input floats \r\n");
+                printf("2. Automatically generate floats \r\n");
+                scanf("%d", &userInput);
 
-                //Randomize numbers in arrays
-                for (int i = 0; i < m; i++)
+                if (userInput == 1)
                 {
-                    for (int j = 0; j < n; j++)
+                    printf("Enter floats for first matrix: \r\n");
+                    for (int i = 0; i < m; i++)
                     {
-                        arr1[i][j] = ((float)rand()/(float)(RAND_MAX)) * 100;
+                        printf("Enter row: ");
+                        for (int j = 0; j < n; j++)
+                        {
+                            scanf("%f", &userNumber);
+                            arr1[i][j] = userNumber;
+                        }
+                    }
+                    printf("Enter floats for second matrix: \r\n");
+                    for (int i = 0; i < a; i++)
+                    {
+                        printf("Enter row: ");
+                        for (int j = 0; j < b; j++)
+                        {
+                            scanf("%f", &userNumber);
+                            arr2[i][j] = userNumber;
+                        }
                     }
                 }
-
-                for (int i = 0; i < a; i++)
+                else
                 {
-                    for (int j = 0; j < b; j++)
+                    //Randomize numbers in arrays
+                    for (int i = 0; i < m; i++)
                     {
-                        arr2[i][j] = ((float)rand()/(float)(RAND_MAX)) * 100;
+                        for (int j = 0; j < n; j++)
+                        {
+                            arr1[i][j] = ((float)rand()/(float)(RAND_MAX)) * 1000.0;
+                        }
+                    }
+
+                    for (int i = 0; i < a; i++)
+                    {
+                        for (int j = 0; j < b; j++)
+                        {
+                            arr2[i][j] = ((float)rand()/(float)(RAND_MAX)) * 1000.0;
+                        }
                     }
                 }
                 break;

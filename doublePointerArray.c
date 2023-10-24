@@ -93,7 +93,7 @@ float** matrixMultiplication(int m, int n, int b, float **arr1, float **arr2)
         }
     }
     end = clock();
-    time_elasped = ((double) (end - start)) / (CLOCKS_PER_SEC);
+    time_elasped = (((double) (end - start)) / (CLOCKS_PER_SEC)) * 1000000;
 
     for(int i = 0; i < m; i++)
     {
@@ -104,26 +104,27 @@ float** matrixMultiplication(int m, int n, int b, float **arr1, float **arr2)
         }
         printf("\r\n");
     }
-    printf("Amount of time elasped: ");
+    printf("Amount of time taken: ");
     printf("%lf", time_elasped);
-    printf("\r\n");
+    printf(" microseconds \r\n");
 
     return arrMult;
 }
 
 int main(void) {
-    float **arr1, **arr2;
+    float **arr1, **arr2, **result;
     int m, n, a, b;
     int userInput = 1;
+    float userNumber;
 
     //Get user input for dimensions
-    printf("Type dimensions for first 2-D array, max 100: ");
+    printf("Type dimensions for first 2-D array: ");
 
     scanf("%d", &m);
     scanf("%d", &n);
     printf("\r\n");
 
-    printf("Type dimensions for second 2-D array, max 100: ");
+    printf("Type dimensions for second 2-D array: ");
     scanf("%d", &a);
     scanf("%d", &b);
     printf("\r\n");
@@ -146,20 +147,51 @@ int main(void) {
         *(arr2+i) = (float*)malloc(b*sizeof(float)); 
     }
 
-    //Fills array with random numbers
-    for (int i = 0; i < m; i++)
+    printf("Would you like to: \r\n");
+    printf("1. Manually input floats \r\n");
+    printf("2. Automatically generate floats \r\n");
+    scanf("%d", &userInput);
+
+    if (userInput == 1)
     {
-        for (int j = 0; j < n; j++)
+        printf("Enter floats for first matrix: \r\n");
+        for (int i = 0; i < m; i++)
         {
-            *(*(arr1+i)+j) = ((float)rand()/(float)(RAND_MAX)) * 100;
+            printf("Enter row: ");
+            for (int j = 0; j < n; j++)
+            {
+                scanf("%f", &userNumber);
+                *(*(arr1+i)+j) = userNumber;
+            }
+        }
+        printf("Enter floats for second matrix: \r\n");
+        for (int i = 0; i < a; i++)
+        {
+            printf("Enter row: ");
+            for (int j = 0; j < b; j++)
+            {
+                scanf("%f", &userNumber);
+                *(*(arr2+i)+j) = userNumber;
+            }
         }
     }
-
-    for (int i = 0; i < m; i++)
+    else
     {
-        for (int j = 0; j < n; j++)
+        //Fills array with random numbers
+        for (int i = 0; i < m; i++)
         {
-            *(*(arr2+i)+j) = ((float)rand()/(float)(RAND_MAX)) * 100;
+            for (int j = 0; j < n; j++)
+            {
+                *(*(arr1+i)+j) = ((float)rand()/(float)(RAND_MAX)) * 1000.0;
+            }
+        }
+
+        for (int i = 0; i < m; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                *(*(arr2+i)+j) = ((float)rand()/(float)(RAND_MAX)) * 1000.0;
+            }
         }
     }
 
@@ -184,7 +216,12 @@ int main(void) {
                 }
                 else
                 {
-                    matrixAddition(m, n, arr1, arr2);
+                    result = matrixAddition(m, n, arr1, arr2);
+                    for (int i = 0; i < m; i++)
+                    {
+                        free(*(result+i));
+                    }   
+                    free(result);
                 }
                 break;
             case 2:
@@ -194,7 +231,12 @@ int main(void) {
                 }
                 else
                 {
-                    matrixSubtraction(m, n, arr1, arr2);
+                    result = matrixSubtraction(m, n, arr1, arr2);
+                    for (int i = 0; i < m; i++)
+                    {
+                        free(*(result+i));
+                    }   
+                    free(result);
                 }
                 break;
             case 3:
@@ -204,36 +246,98 @@ int main(void) {
                 }
                 else
                 {
-                    matrixMultiplication(m, n, b, arr1, arr2);
+                    result = matrixMultiplication(m, n, b, arr1, arr2);
+                    for (int i = 0; i < m; i++)
+                    {
+                        free(*(result+i));
+                    }   
+                    free(result);
                 }
                 break;
             case 4:
-                printf("Type dimensions for first 2-D array, max 100: ");
+                // free the memory
+                for (int i = 0; i < m; i++)
+                {
+                    free(*(arr1+i));
+                }   
+                for (int i = 0; i < n; i++)
+                {
+                    free(*(arr2+i));
+                }
+                free(arr1);
+                free(arr2);
+                printf("Type dimensions for first 2-D array: ");
 
                 scanf("%d", &m);
                 scanf("%d", &n);
                 printf("\r\n");
 
-                printf("Type dimensions for second 2-D array, max 100: ");
+                printf("Type dimensions for second 2-D array: ");
                 scanf("%d", &a);
                 scanf("%d", &b);
                 printf("\r\n");
 
+                arr1 = (float*)malloc(n*sizeof(float));
+                arr1 = (float**)malloc(m*sizeof(float*)); 
 
-                //Randomize numbers in arrays
+                arr2 = (float*)malloc(b*sizeof(float));
+                arr2 = (float**)malloc(a*sizeof(float*)); 
+
                 for (int i = 0; i < m; i++)
                 {
-                    for (int j = 0; j < n; j++)
-                    {
-                        *(*(arr1+i)+j) = ((float)rand()/(float)(RAND_MAX)) * 100;
-                    }
+                    *(arr1+i) = (float*)malloc(n*sizeof(float)); 
                 }
 
                 for (int i = 0; i < a; i++)
                 {
-                    for (int j = 0; j < b; j++)
+                    *(arr2+i) = (float*)malloc(b*sizeof(float)); 
+                }
+
+                printf("Would you like to: \r\n");
+                printf("1. Manually input floats \r\n");
+                printf("2. Automatically generate floats \r\n");
+                scanf("%d", &userInput);
+
+                if (userInput == 1)
+                {
+                    printf("Enter floats for first matrix: \r\n");
+                    for (int i = 0; i < m; i++)
                     {
-                        *(*(arr1+i)+j) = ((float)rand()/(float)(RAND_MAX)) * 100;
+                        printf("Enter row: ");
+                        for (int j = 0; j < n; j++)
+                        {
+                            scanf("%f", &userNumber);
+                            *(*(arr1+i)+j) = userNumber;
+                        }
+                    }
+                    printf("Enter floats for second matrix: \r\n");
+                    for (int i = 0; i < a; i++)
+                    {
+                        printf("Enter row: ");
+                        for (int j = 0; j < b; j++)
+                        {
+                            scanf("%f", &userNumber);
+                            *(*(arr2+i)+j) = userNumber;
+                        }
+                    }
+                }
+                else
+                {
+                    //Fills array with random numbers
+                    for (int i = 0; i < m; i++)
+                    {
+                        for (int j = 0; j < n; j++)
+                        {
+                            *(*(arr1+i)+j) = ((float)rand()/(float)(RAND_MAX)) * 1000.0;
+                        }
+                    }
+
+                    for (int i = 0; i < m; i++)
+                    {
+                        for (int j = 0; j < n; j++)
+                        {
+                            *(*(arr2+i)+j) = ((float)rand()/(float)(RAND_MAX)) * 1000.0;
+                        }
                     }
                 }
                 break;
@@ -243,11 +347,11 @@ int main(void) {
     //Frees arrays from memory
     for (int i = 0; i < m; i++)
     {
-        free(arr1[i]);
+        free(*(arr1+i));
     }
     for (int i = 0; i < n; i++)
     {
-        free(arr2[i]);
+        free(*(arr2+i));
     }
 
     printf("Finished");
